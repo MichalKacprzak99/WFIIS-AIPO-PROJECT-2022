@@ -35,7 +35,7 @@ class UiIntroWindow(object):
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         self.intro_window.setWindowTitle(_translate("intro_window", "MainWindow"))
-        self.info_text_label.setText(_translate("intro_window", "Loading neutral network model"))
+        self.info_text_label.setText(_translate("intro_window", "Loading"))
         self.info_text_label.setFont(QFont('Arial', 1))
 
 
@@ -52,7 +52,7 @@ class IntroWindow(UiIntroWindow):
             self.info_text_label.setText(_translate("intro_window", "Click to continue"))
             self.go_further.clicked.connect(self.close_window)
         else:
-            self.info_text_label.setText(_translate("intro_window", "Failed to load model"))
+            self.info_text_label.setText(_translate("intro_window", "Loading error"))
 
     def close_window(self):
         self.intro_window.close()

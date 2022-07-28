@@ -1,8 +1,7 @@
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
-from tensorflow.keras import models
 
 
-class ModelLoaderSignals(QObject):
+class GeoLocalizatorSignals(QObject):
     """
     Defines the signals available from a running worker thread.
 
@@ -23,16 +22,14 @@ class ModelLoaderSignals(QObject):
     result = pyqtSignal(object)
 
 
-class ModelLoader(QRunnable):
-    trained_model = None
+class GeoLocalizator(QRunnable):
+    data = None
 
-    def __init__(self):
-        super(ModelLoader, self).__init__()
+    def __init__(self, graphic_data):
+        super(GeoLocalizator, self).__init__()
 
-        self.signals = ModelLoaderSignals()
-
-    def predict(self, img):
-        return self.trained_model.predict(img)
+        self.graphic_data = graphic_data
+        self.signals = GeoLocalizatorSignals()
 
     @pyqtSlot()
     def run(self):
@@ -40,11 +37,8 @@ class ModelLoader(QRunnable):
         """
         Your code goes in this function
         """
-
         try:
-            # self.trained_model = models.load_model("../model/model_trained_animals_batch_16_imagenet.hdf5")
-            self.trained_model = True
-        except:
-            self.trained_model = None
+            self.data = {i: 0.7 for i in range(100)}
+            print(self.data)
         finally:
             self.signals.finished.emit()

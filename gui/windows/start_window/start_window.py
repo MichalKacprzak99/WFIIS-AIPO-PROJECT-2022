@@ -1,8 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QThreadPool
 
-from gui.windows import IntroWindow
-from gui.loaders import ImageLoader, ModelLoader
+from gui.windows import IntroWindow, ResultsWindow
+from gui.loaders import ImageLoader, ModelLoader, VideoLoader
 
 
 class UiStartWindow(object):
@@ -49,6 +49,7 @@ class StartWindow(UiStartWindow):
         self.setupUi(start_window)
         self.window = QtWidgets.QMainWindow()
         self.intro_window = IntroWindow(self.window, start_window)
+        self.results_window = None
         self.start_window.hide()
         self.threadpool = QThreadPool()
         self.model_loader = ModelLoader()
@@ -56,27 +57,36 @@ class StartWindow(UiStartWindow):
         self.model_loader.signals.finished.connect(
             lambda: self.intro_window.after_model_load(self.model_loader.trained_model)
         )
+        self.threadpool.clear()
         self.image_editor_window = None
 
         self.image_load_button.clicked.connect(self.load_user_image)
         self.video_load_button.clicked.connect(self.load_user_video)
-
-    def hide_window(self):
-        self.intro_window.intro_window.show()
 
     def load_user_image(self):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         image_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.start_window, "QFileDialog.getOpenFileName()", "",
                                                               "Image files (*.jpg *.png)", options=options)
-        user_image = ImageLoader(image_path)
+
+        if image_path:
+            image_loader = ImageLoader(image_path)
+            self.start_window.hide()
+            self.results_window = ResultsWindow(self.window, self.start_window, graphic_data=[image_loader.image])
+            self.results_window.show()
 
     def load_user_video(self):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        # TODO extend options of video
         video_path, _ = QtWidgets.QFileDialog.getOpenFileName(self.start_window, "QFileDialog.getOpenFileName()", "",
-                                                              "Video files (*.mp4)", options=options)
+                                                              "Video files (*.mp4 *.mov *.avi)", options=options)
+
+        if video_path:
+            video_loader = VideoLoader(video_path)
+            graphic_data = video_loader.get_video_frames()
+            self.start_window.hide()
+            self.results_window = ResultsWindow(self.window, self.start_window, graphic_data=graphic_data)
+            self.results_window.show()
 
     def start(self):
         self.intro_window.start()
