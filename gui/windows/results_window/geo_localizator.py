@@ -40,11 +40,22 @@ class GeoLocalizator(QRunnable):
         """
         Your code goes in this function
         """
-        self.predictor.predict_for_images(self.graphic_data)
-        
+        res = self.predictor.predict_for_images(self.graphic_data)
+
+        # normalize
+        s = 0
+        for k in res:
+            s += res[k]
+        for k in res:
+            res[k] = res[k] / s
+
+        print("RESULT: ")  
+        print(res)
 
         try:
-            self.data = {i: 0.7 for i in range(100)}
-            print(self.data)
+            if not res:
+                self.data = {"Nie wiem ¯\\_(ツ)_/¯ ": 1.0}
+            else:
+                self.data = res
         finally:
             self.signals.finished.emit()

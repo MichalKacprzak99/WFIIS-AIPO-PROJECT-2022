@@ -14,7 +14,6 @@ class SignesNnDetector:
         image = np.expand_dims(image, axis=0)
         # make bounding box predictions on the input image
         preds = self.model.predict(image)[0]
-        print(f"PREDICTION: {preds}")
         startX = int(round(preds[0] * img.shape[1]))
         startY = int(round(preds[1] * img.shape[0]))
         endX = int(round(preds[2] * img.shape[1]))
