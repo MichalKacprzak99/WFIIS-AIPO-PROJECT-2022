@@ -6,3 +6,6 @@
 
 ## License plate recognition
 https://colab.research.google.com/drive/1OFPxE2K5ug0fvS6l1qhk-kKq2R95HesL?usp=sharing
+
+##
+Aby zadziałało potrzebujesz pliku detector.h5 (zapytaj Pawła jeśli nie masz dostępu). Plik ten należy wrzucić do folderu model/model\_files.

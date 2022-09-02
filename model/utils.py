@@ -21,15 +21,9 @@ def expand_rectanle_whit_rect(to_be_expanded, rect):
         max(to_be_expanded[3], rect[3]))
     return ret
 
-def plate_convert(tup, di):
-    for a, b in tup:
-        di.setdefault(b, a)
-    return di
-
 def safeget(dct, *keys):
     for key in keys:
         try:
-            print(f"Key: {key}")
             dct = dct[key]
         except:
             return None
