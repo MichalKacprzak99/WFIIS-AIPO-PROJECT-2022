@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
+from model.predictor import Predictor
 
 
 class GeoLocalizatorSignals(QObject):
@@ -31,12 +32,17 @@ class GeoLocalizator(QRunnable):
         self.graphic_data = graphic_data
         self.signals = GeoLocalizatorSignals()
 
+        self.predictor = Predictor()
+
     @pyqtSlot()
     def run(self):
 
         """
         Your code goes in this function
         """
+        self.predictor.predict_for_images(self.graphic_data)
+        
+
         try:
             self.data = {i: 0.7 for i in range(100)}
             print(self.data)

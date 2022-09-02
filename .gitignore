@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 
 .idea
+
+testData/
+model/model_files/detector.h5
