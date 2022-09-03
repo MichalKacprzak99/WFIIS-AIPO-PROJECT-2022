@@ -8,10 +8,14 @@ class VideoLoader:
 
     def get_video_frames(self):
         frames = []
+        frame_counter = 0
         while True:
             ret, frame = self.video.read()
             if ret is False:
                 break
-            frames.append(frame)
+            if frame_counter % 30 == 0:
+                frames.append(frame)
+            frame_counter = (frame_counter + 1) % 30
 
+        print(f"Using: {len(frames)} frames")
         return frames

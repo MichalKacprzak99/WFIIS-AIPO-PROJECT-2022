@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
+from model.predictor import Predictor
 
 
 class GeoLocalizatorSignals(QObject):
@@ -31,14 +32,37 @@ class GeoLocalizator(QRunnable):
         self.graphic_data = graphic_data
         self.signals = GeoLocalizatorSignals()
 
+        self.predictor = Predictor()
+
     @pyqtSlot()
     def run(self):
 
         """
         Your code goes in this function
         """
+        res = self.predictor.predict_for_images(self.graphic_data)
+
+        # normalize
+        s = 0
+        for k in res:
+            s += res[k]
+        for k in res:
+            res[k] = res[k] / s
+
+        sorted_res = {}
+        sorted_keys = sorted(res, key=res.get, reverse = True)
+        for w in sorted_keys:
+            sorted_res[w] = res[w]
+
+        res = sorted_res
+
+        print("RESULT: ")  
+        print(res)
+
         try:
-            self.data = {i: 0.7 for i in range(100)}
-            print(self.data)
+            if not res:
+                self.data = {"Nie wiem ¯\\_(ツ)_/¯ ": 1.0}
+            else:
+                self.data = res
         finally:
             self.signals.finished.emit()
