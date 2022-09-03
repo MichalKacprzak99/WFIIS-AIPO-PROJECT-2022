@@ -49,6 +49,13 @@ class GeoLocalizator(QRunnable):
         for k in res:
             res[k] = res[k] / s
 
+        sorted_res = {}
+        sorted_keys = sorted(res, key=res.get, reverse = True)
+        for w in sorted_keys:
+            sorted_res[w] = res[w]
+
+        res = sorted_res
+
         print("RESULT: ")  
         print(res)
 
