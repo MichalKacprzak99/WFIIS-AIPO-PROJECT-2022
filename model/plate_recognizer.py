@@ -3,10 +3,12 @@ import os
 import requests
 import json
 from model.utils import safeget
-from model.country_dictionary import COUNTRY_DICTIONARY;
+from model.country_dictionary import COUNTRY_DICTIONARY
+
 
 class PlateRecognizer:
-    def detect(self, img):
+    @staticmethod
+    def detect(img):
         temp_image_file = "./temp.jpg"
         cv2.imwrite(temp_image_file, img)
         with open(temp_image_file, 'rb') as fp:
@@ -20,7 +22,7 @@ class PlateRecognizer:
             fp.close()
             os.remove(temp_image_file)
 
-            if plate_region_code == None:
+            if plate_region_code is None:
                 return None
             for key, value in COUNTRY_DICTIONARY.items():
                 if value['code'] == plate_region_code:

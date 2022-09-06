@@ -2,11 +2,12 @@ from copy import deepcopy
 from model.plate_recognizer import PlateRecognizer
 from model.signes.signes_fc_detector import SignesFcDetector
 from model.signes.signes_nn_detector import SignesNnDetector
-from model.road_side_detector import RoadSideDetector;
+from model.road_side_detector import RoadSideDetector
 from model.lang_and_location_detector import LangAndLocationDetector
 from model.utils import *
-from model.country_dictionary import COUNTRY_DICTIONARY;
+from model.country_dictionary import COUNTRY_DICTIONARY
 from langcodes import *
+
 
 class Predictor:
     def __init__(self) -> None:
@@ -18,18 +19,17 @@ class Predictor:
 
         self.plate_predition_weight = 2.0
         self.signe_predition_weight = 1.0
-        
+
         self.lang_weight = 1.0
         self.country_weight = 1.0
         self.country_city_weight = 1.0
-        self.country_region_weight = 0.5 
+        self.country_region_weight = 0.5
 
         self.road_side_additional_weight = 0.5
 
-
     def set_up(self) -> None:
         pass
-            
+
     def clear(self) -> None:
         pass
 
@@ -45,7 +45,7 @@ class Predictor:
 
             for rect in res_fc:
                 if rectangle_overlap(original_signe_rect, rect):
-                    signe_rectangle = expand_rectanle_whit_rect(signe_rectangle, rect)
+                    signe_rectangle = expand_rectangle_whit_rect(signe_rectangle, rect)
 
             signe_res = dict()
             if signe_rectangle[0] == signe_rectangle[2] or signe_rectangle[1] == signe_rectangle[3]:
@@ -60,9 +60,10 @@ class Predictor:
                 self.lang_weight = self.lang_weight / 2.0
                 self.country_city_weight = self.country_city_weight / 2.0
                 self.country_region_weight = self.country_region_weight / 2.0
-                for c in  COUNTRY_DICTIONARY:
+                for c in COUNTRY_DICTIONARY:
                     if 'lang' in signe_res:
-                        if COUNTRY_DICTIONARY[c]["language"] == Language.get(signe_res['lang']).display_name('en').lower():
+                        if COUNTRY_DICTIONARY[c]["language"] == Language.get(signe_res['lang']).display_name(
+                                'en').lower():
                             if c in predition:
                                 predition[c] = predition[c] + self.lang_weight
                             else:
@@ -80,9 +81,10 @@ class Predictor:
                             else:
                                 predition[c] = self.country_city_weight
 
-            for c in  COUNTRY_DICTIONARY:
+            for c in COUNTRY_DICTIONARY:
                 if 'lang' in whole_img_res:
-                    if COUNTRY_DICTIONARY[c]["language"] == Language.get(whole_img_res['lang']).display_name('en').lower():
+                    if COUNTRY_DICTIONARY[c]["language"] == Language.get(whole_img_res['lang']).display_name(
+                            'en').lower():
                         if c in predition:
                             predition[c] = predition[c] + self.lang_weight
                         else:
@@ -97,16 +99,14 @@ class Predictor:
                         predition[c] = predition[c] + self.country_city_weight
                     else:
                         predition[c] = self.country_city_weight
-                            
+
             if signe_res:
                 self.lang_weight = self.lang_weight * 2.0
                 self.country_city_weight = self.country_city_weight * 2.0
                 self.country_region_weight = self.country_region_weight * 2.0
 
-
             print(f"singe_rs :{signe_res}")
             print(f"whole_img_res :{whole_img_res}")
-
 
             plate_pred = self.plate_recognizer.detect(img)
             if plate_pred == None:
@@ -125,5 +125,3 @@ class Predictor:
                     predition[p] = predition[p] + self.road_side_additional_weight
 
         return predition
-            
-

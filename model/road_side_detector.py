@@ -8,7 +8,6 @@ class RoadSideDetector:
         angle = abs(math.atan2(abs(y2 - y1), abs(x2 - x1)) * 180.0 / math.pi)
         return angle
 
-
     def is_near_center_line(self, width, x1, x2):
         center = width / 2
         max_distance = width / 4
@@ -52,4 +51,3 @@ class RoadSideDetector:
                 sum_left_lines += multiplier
 
         return "right" if sum_right_lines >= sum_left_lines else "left"
-
