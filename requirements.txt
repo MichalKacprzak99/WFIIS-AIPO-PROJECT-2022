@@ -13,3 +13,4 @@ pytesseract
 easyocr
 langcodes
 language_data
+requests
