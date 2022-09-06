@@ -1,26 +1,19 @@
 # WFIIS-AIPO-PROJECT-2022
 
-## TODO
-
-- create class to load user's video
-
-## License plate recognition
-https://colab.research.google.com/drive/1OFPxE2K5ug0fvS6l1qhk-kKq2R95HesL?usp=sharing
-
 ##
-Aby zadziałało potrzebujesz pliku detector.h5 (zapytaj Pawła jeśli nie masz dostępu). Plik ten należy wrzucić do folderu model/model\_files.
+Project setup:
 
-Potem zrób to:
+1. Run console command: python -m spacy download en_core_web_sm
 
-python -m spacy download en\_core\_web\_sm
+2. Run console command: python model/lang_and_location/download\_packages.py
 
-python model/lang\_and\_location/download\_packages.py
+3. Download tesseract exe from https://github.com/UB-Mannheim/tesseract/wiki.
 
-Download tesseract exe from https://github.com/UB-Mannheim/tesseract/wiki.
+4. Install this exe in 'C:/Users/YOUR_WINDOWS_USER_NAME/AppData/Local/Programs/Tesseract-OCR'
 
-Install this exe in 'C:/Users/YOUR\_FANCY\_WINDOWS\_USER\_NAME/AppData/Local/Programs/Tesseract-OCR'
+5. Run console command: pip install pytesseract
 
-pip install pytesseract
+6. In the line 11 of model/lang_and_location/detect_langs.py set: 
 
-In the line 11 of model/lang\_and\_location/detect\_langs.py set: pytesseract.pytesseract.tesseract\_cmd = r"C:\Users\YOUR\_FANCY\_WINDOWS\_USER\_NAME\AppData\Local\Tesseract-OCR\tesseract"
 
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\YOUR_WINDOWS_USER_NAME\AppData\Local\Tesseract-OCR\tesseract"
