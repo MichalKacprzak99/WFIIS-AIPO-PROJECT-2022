@@ -131,4 +131,4 @@ dmypy.json
 .idea
 
 testData/
-model/model_files/detector.h5
+
